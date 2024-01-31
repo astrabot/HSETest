@@ -77,6 +77,8 @@ final class CategoryViewModel: CategoryViewModelType {
         self.title = category.displayName
     }
 
+    deinit { print("deinit \(Swift.type(of: self))") }
+
     func makeCategoriesCarouselViewModel() -> CategoriesCarouselViewModelType {
         let viewModel = CategoriesCarouselViewModel(categories: category.children)
         viewModel.onSelectCategory = { [weak self] category in
@@ -120,16 +122,17 @@ final class CategoryViewModel: CategoryViewModelType {
     private func search(query: String, page: SearchPaging?) {
         state = .loading
         fetchCancellation = api.search(path: category.path, query: query.isEmpty ? "*" : query, page: page)
-            .sink(receiveCompletion: { result in
+            .sink(receiveCompletion: { [weak self] result in
                 if case let .failure(error) = result {
                     print(error)
-                    self.state = .failed(error)
+                    self?.state = .failed(error)
                 }
-            }, receiveValue: { result in
+            }, receiveValue: { [weak self] result in
                 print("Did fetch search result: page \(result.paging?.currentPage ?? 1) | " +
                       "hits per page \(result.hits.count) | " +
                       "total hits \(result.totalHits) | " +
                       "total pages \(result.paging?.pageCount ?? 1)")
+                guard let self = self else { return }
                 let currentPage = result.paging?.currentPage ?? 1 // page numbering begins from 1
                 self.productsPerPage[currentPage] = result.hits
                 self.lastLoadedPaging = result.paging

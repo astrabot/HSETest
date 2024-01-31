@@ -58,13 +58,13 @@ final class HomeViewModel: HomeViewModelType {
         state = .loading
         fetchCancellation = api.categories()
             //.delay(for: 0.5, scheduler: RunLoop.main) // just to show loading spinner :)
-            .sink(receiveCompletion: { result in
+            .sink(receiveCompletion: { [weak self] result in
                 if case let .failure(error) = result {
-                    self.state = .fail(error)
+                    self?.state = .fail(error)
                 }
-            }, receiveValue: { container in
+            }, receiveValue: { [weak self] container in
                 let categories: [CategoryModel] = container.categories.map { CategoryModelBuilder().buildModel(for: $0) }
-                self.state = .loaded(categories)
+                self?.state = .loaded(categories)
             })
     }
 
