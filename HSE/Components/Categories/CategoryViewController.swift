@@ -38,8 +38,6 @@ final class CategoryViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.prefersLargeTitles = true
-
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -64,7 +62,6 @@ final class CategoryViewController: UIViewController {
             switch $0 {
             case .initial: break
             case .loading:
-                self.collectionView.reloadData()
                 self.setFooterVisible(true)
             case .loaded:
                 self.collectionView.reloadData()

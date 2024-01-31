@@ -33,7 +33,6 @@ final class HomeViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.prefersLargeTitles = true
         tableView.register(HomeCell.self)
         view.addSubview(spinner)
         NSLayoutConstraint.activate([

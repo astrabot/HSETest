@@ -73,7 +73,7 @@ final class CategoryViewModel: CategoryViewModelType {
     init(category: CategoryModel, api: APIServiceType) {
         self.category = category
         self.api = api
-        self.title = category.path
+        self.title = category.displayName
     }
 
     func makeCategoriesCarouselViewModel() -> CategoriesCarouselViewModelType {
@@ -91,7 +91,7 @@ final class CategoryViewModel: CategoryViewModelType {
         let currentVisiblePage = Int(maxVisibleItem / hitsPerPage) + 1
         if self.currentVisiblePage != currentVisiblePage {
             self.currentVisiblePage = currentVisiblePage
-            title = category.path + " \(currentVisiblePage) of \(paging.pageCount)"
+            title = category.displayName + " \(currentVisiblePage) of \(paging.pageCount)"
         }
     }
 
