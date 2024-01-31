@@ -1,0 +1,33 @@
+included:
+  - HSETestTests
+  - HSETestUITests
+excluded:
+  - Pods
+  - Frameworks
+warning_threshold: 15
+disabled_rules:
+  - comment_spacing
+  - identifier_name
+  - unused_closure_parameter
+  - discarded_notification_center_observer
+type_name:
+  excluded:
+  - UI
+line_length: 255
+file_length: 500
+cyclomatic_complexity:
+  warning: 15
+  error: 20
+function_parameter_count:
+  warning: 10
+  error: 15
+function_body_length:
+  warning: 100
+  error: 150
+type_body_length:
+  warning: 400
+  error: 500
+large_tuple:
+  warning: 6
+  error: 8
+reporter: "xcode"
