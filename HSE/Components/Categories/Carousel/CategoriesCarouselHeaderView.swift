@@ -9,17 +9,20 @@ private final class LeftAlignedCollectionViewFlowLayout: UICollectionViewFlowLay
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         guard let attributes = super.layoutAttributesForElements(in: rect) else { return nil }
 
+        var newAttributes = [UICollectionViewLayoutAttributes]()
         var leftMargin = sectionInset.left
         var maxY: CGFloat = -1.0
         for attribute in attributes {
-            if attribute.frame.origin.y >= maxY {
+            guard let newAttribute = attribute.copy() as? UICollectionViewLayoutAttributes else { continue }
+            if newAttribute.frame.origin.y >= maxY {
                 leftMargin = sectionInset.left
             }
-            attribute.frame.origin.x = leftMargin
-            leftMargin += attribute.frame.width + minimumInteritemSpacing
-            maxY = max(attribute.frame.maxY, maxY)
+            newAttribute.frame.origin.x = leftMargin
+            leftMargin += newAttribute.frame.width + minimumInteritemSpacing
+            maxY = max(newAttribute.frame.maxY, maxY)
+            newAttributes.append(newAttribute)
         }
-        return attributes
+        return newAttributes
     }
 }
 
