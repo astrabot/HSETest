@@ -59,7 +59,7 @@ final class APIService: APIServiceType {
     ///   - query: A search query string.
     ///   - page: Optional. A page of search results. No value means returning the first page with the default page size.
     func search(path: String, query: String, page: SearchPaging?) -> AnyPublisher<SearchResult, APIError> {
-        print("Load path: \(path)")
+        print("Load path: '\(path)' | query: '\(query)' | page: \(page?.number ?? 1)")
         var components = URLComponents() // NOTE: URLComponents automatically encodes query items
         components.queryItems = [
             URLQueryItem(name: "query", value: query),
