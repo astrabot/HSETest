@@ -18,7 +18,7 @@ final class ProductViewModel: ProductViewModelType {
     lazy var name: String? = product.base.name
     lazy var description: String? = product.base.description
     lazy var imageURL: URL? = {
-        variants.first?.imageURL.flatMap {
+        product.imageUrl.flatMap {
             AppConstants.baseProductImageURL.appendingPathComponent($0.appending(AppConstants.picsSuffixLarge))
         }
     }()

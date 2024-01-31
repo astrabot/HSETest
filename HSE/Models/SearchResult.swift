@@ -13,30 +13,30 @@ struct Paging: Decodable, Equatable {
 
 struct Variant: Decodable, Equatable {
     private enum CodingKeys: String, CodingKey {
+        case sku = "ProductNumber"
         case status = "Status"
         case regularPrice = "ReferencePrice"
         case specialPrice = "Price"
         case description = "variantValues"
-        case imageURL = "ImageURL"
-        case variantId = "ProductNumber"
+        case imageUrl = "ImageURL"
     }
+    let sku: String
     let status: String
     let regularPrice: Double?
     let specialPrice: Double?
     let description: String?
-    let imageURL: String?
-    let variantId: String
+    let imageUrl: String?
 }
 
-struct Product: Decodable, Equatable {
+struct BaseProduct: Decodable, Equatable {
     private enum CodingKeys: String, CodingKey {
-        case productId = "MasterProductNumber"
+        case sku = "MasterProductNumber"
         case name = "Name"
         case description = "Description"
         case shortDescription = "ShortDescription"
         case brand = "Brand"
     }
-    let productId: String
+    let sku: String
     let name: String?
     let description: String?
     let shortDescription: String?
@@ -51,9 +51,14 @@ struct ProductHit: Decodable, Equatable {
         case position
     }
     let id: String
-    let base: Product
+    let base: BaseProduct
     let variants: [Variant]
     let position: Int
+
+    /// Get main product image as the image of the first variant
+    var imageUrl: String? {
+        variants.first?.imageUrl
+    }
 }
 
 struct SearchResult: Decodable, Equatable {

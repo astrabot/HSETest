@@ -103,7 +103,7 @@ final class ProductCell: UICollectionViewCell {
     func configure(with product: ProductHit) {
         titleLabel.text = product.base.name
         descriptionLabel.text = product.base.shortDescription
-        guard let imageUrl = product.variants.first?.imageURL else {
+        guard let imageUrl = product.imageUrl else {
             imageView.image = UIImage(systemName: Images.System.questionmark)?.withRenderingMode(.alwaysTemplate)
             return
         }

@@ -83,7 +83,7 @@ final class VariantCell: UICollectionViewCell {
     func configure(with variant: Variant) {
         titleLabel.text = variant.regularPrice.flatMap { priceFormatter.string(from: NSDecimalNumber(value: $0)) }
         imageView.kf.indicatorType = .activity
-        variant.imageURL.flatMap {
+        variant.imageUrl.flatMap {
             let url = AppConstants.baseProductImageURL.appendingPathComponent($0.appending(AppConstants.picsSuffixSmall))
             imageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { [weak imageView] result in
                 if case .failure = result {
