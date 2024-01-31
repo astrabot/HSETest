@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5E75BD9127BBA7810094ED8C /* ProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E75BD9027BBA7810094ED8C /* ProductViewController.swift */; };
+		5E75BD9327BBA78F0094ED8C /* ProductViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E75BD9227BBA78F0094ED8C /* ProductViewModel.swift */; };
+		5E75BD9727BBAD3A0094ED8C /* VariantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E75BD9627BBAD3A0094ED8C /* VariantCell.swift */; };
+		5E75BD9927BBBCE80094ED8C /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E75BD9827BBBCE80094ED8C /* AppConstants.swift */; };
 		5EC9A11327B6AA3C0040896F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC9A11227B6AA3C0040896F /* AppDelegate.swift */; };
 		5EC9A11527B6AA3C0040896F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC9A11427B6AA3C0040896F /* SceneDelegate.swift */; };
 		5EC9A11727B6AA3C0040896F /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC9A11627B6AA3C0040896F /* HomeViewController.swift */; };
@@ -63,6 +67,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5E75BD9027BBA7810094ED8C /* ProductViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductViewController.swift; sourceTree = "<group>"; };
+		5E75BD9227BBA78F0094ED8C /* ProductViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductViewModel.swift; sourceTree = "<group>"; };
+		5E75BD9627BBAD3A0094ED8C /* VariantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariantCell.swift; sourceTree = "<group>"; };
+		5E75BD9827BBBCE80094ED8C /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		5EC9A10F27B6AA3C0040896F /* HSETest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HSETest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EC9A11227B6AA3C0040896F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5EC9A11427B6AA3C0040896F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -130,6 +138,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5E75BD8F27BBA6BC0094ED8C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5E75BD9627BBAD3A0094ED8C /* VariantCell.swift */,
+				5E75BD9227BBA78F0094ED8C /* ProductViewModel.swift */,
+				5E75BD9027BBA7810094ED8C /* ProductViewController.swift */,
+			);
+			path = Products;
+			sourceTree = "<group>";
+		};
 		5EC9A10627B6AA3C0040896F = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +226,7 @@
 			children = (
 				5EC9A11227B6AA3C0040896F /* AppDelegate.swift */,
 				5EC9A14A27B6B5080040896F /* AppCoordinator.swift */,
+				5E75BD9827BBBCE80094ED8C /* AppConstants.swift */,
 				5EC9A11427B6AA3C0040896F /* SceneDelegate.swift */,
 			);
 			path = Application;
@@ -218,6 +237,7 @@
 			children = (
 				5EC9A15727B6CC130040896F /* Home */,
 				5EC9A15827B6CC320040896F /* Categories */,
+				5E75BD8F27BBA6BC0094ED8C /* Products */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -225,8 +245,8 @@
 		5EC9A14E27B6B9970040896F /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				5EC9A14F27B6B9CE0040896F /* Reusable.swift */,
 				5EC9A15327B6BA300040896F /* NibLoadable.swift */,
+				5EC9A14F27B6B9CE0040896F /* Reusable.swift */,
 				5EC9A16227B720AD0040896F /* UICollectionView+Reusable.swift */,
 				5EC9A15127B6BA010040896F /* UITableView+Reusable.swift */,
 			);
@@ -456,9 +476,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E75BD9127BBA7810094ED8C /* ProductViewController.swift in Sources */,
 				5EC9A18027B863580040896F /* CategoryCarouselCell.swift in Sources */,
 				5EC9A18427B870080040896F /* CategoriesCarouselHeaderView.swift in Sources */,
 				5EC9A14B27B6B5080040896F /* AppCoordinator.swift in Sources */,
+				5E75BD9727BBAD3A0094ED8C /* VariantCell.swift in Sources */,
 				5EC9A11727B6AA3C0040896F /* HomeViewController.swift in Sources */,
 				5EC9A15B27B6CC560040896F /* CategoryViewController.swift in Sources */,
 				5EC9A15F27B6DACD0040896F /* SearchResult.swift in Sources */,
@@ -469,9 +491,11 @@
 				5EC9A15627B6BAC20040896F /* HomeCell.swift in Sources */,
 				5EC9A15427B6BA300040896F /* NibLoadable.swift in Sources */,
 				5EC9A14727B6ABDC0040896F /* Category.swift in Sources */,
+				5E75BD9327BBA78F0094ED8C /* ProductViewModel.swift in Sources */,
 				5EC9A15227B6BA010040896F /* UITableView+Reusable.swift in Sources */,
 				5EC9A15027B6B9CE0040896F /* Reusable.swift in Sources */,
 				5EC9A15D27B6CFD90040896F /* CategoryViewModel.swift in Sources */,
+				5E75BD9927BBBCE80094ED8C /* AppConstants.swift in Sources */,
 				5EC9A11327B6AA3C0040896F /* AppDelegate.swift in Sources */,
 				5EC9A16527B726630040896F /* CategoryViewLayout.swift in Sources */,
 				5EC9A17927B83B310040896F /* SearchPaging.swift in Sources */,

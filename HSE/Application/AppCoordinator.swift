@@ -29,7 +29,16 @@ class AppCoordinator {
         viewModel.onSelectCategory = { [weak self] subcategory in
             self?.selectCategory(subcategory)
         }
+        viewModel.onSelectProduct = { [weak self] product in
+            self?.selectProduct(product)
+        }
         categoryViewController.viewModel = viewModel
         navigationController.pushViewController(categoryViewController, animated: true)
+    }
+
+    func selectProduct(_ product: ProductHit) {
+        let productViewController = ProductViewController()
+        productViewController.viewModel = ProductViewModel(product: product, api: apiService)
+        navigationController.pushViewController(productViewController, animated: true)
     }
 }

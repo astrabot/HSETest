@@ -7,7 +7,7 @@ import UIKit
 
 protocol CategoryViewModelType {
     var state: CategoryViewModel.State { get }
-    var products: [ProductHit] { get }
+    var products: [ProductHit] { get } // we expose models here just for our convenience. Alternative implementation can be found in 'ProductViewModel'
     var hasMoreProductsToDisplay: Bool { get }
     var hasSubcategories: Bool { get }
     var titlePublisher: AnyPublisher<String?, Never> { get }
@@ -18,8 +18,7 @@ protocol CategoryViewModelType {
     func startInitialFetching()
     func fetchMoreResults()
     func retryFailedFetch()
-    func selectCategory(_ category: CategoryModel)
-    func selectProduct(_ product: ProductHit)
+    func selectProduct(at indexPath: IndexPath)
 }
 
 final class CategoryViewModel: CategoryViewModelType {
@@ -138,11 +137,7 @@ final class CategoryViewModel: CategoryViewModelType {
             })
     }
 
-    func selectCategory(_ category: CategoryModel) {
-        onSelectCategory?(category)
-    }
-
-    func selectProduct(_ product: ProductHit) {
-        onSelectProduct?(product)
+    func selectProduct(at indexPath: IndexPath) {
+        onSelectProduct?(products[indexPath.item])
     }
 }

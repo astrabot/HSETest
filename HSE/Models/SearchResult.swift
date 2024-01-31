@@ -32,12 +32,14 @@ struct Product: Decodable, Equatable {
     private enum CodingKeys: String, CodingKey {
         case productId = "MasterProductNumber"
         case name = "Name"
-        case description = "ShortDescription"
+        case description = "Description"
+        case shortDescription = "ShortDescription"
         case brand = "Brand"
     }
     let productId: String
     let name: String?
     let description: String?
+    let shortDescription: String?
     let brand: String?
 }
 

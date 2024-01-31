@@ -10,8 +10,6 @@ final class ProductCell: UICollectionViewCell {
         static let cornerRadius: CGFloat = 5
         static let borderColor: UIColor = .gray
         static let borderWidth: CGFloat = 1.0 / UIScreen.main.scale
-        static let baseURL = URL(string: "https://pic.hse24-dach.net/media/de/products")!
-        static let picsSuffix = "_pics480.jpg"
     }
 
     lazy var imageView: UIImageView = {
@@ -104,20 +102,16 @@ final class ProductCell: UICollectionViewCell {
 
     func configure(with product: ProductHit) {
         titleLabel.text = product.base.name
-        descriptionLabel.text = product.base.description
+        descriptionLabel.text = product.base.shortDescription
         guard let imageUrl = product.variants.first?.imageURL else {
             imageView.image = UIImage(systemName: Images.System.questionmark)?.withRenderingMode(.alwaysTemplate)
-            imageView.tintColor = .gray
             return
         }
-        let url = Constants.baseURL.appendingPathComponent(imageUrl.appending(Constants.picsSuffix))
+        let url = AppConstants.baseProductImageURL.appendingPathComponent(imageUrl.appending(AppConstants.picsSuffixSmall))
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(with: url, options: [.transition(.fade(0.3))]) { [weak imageView] result in
             if case .failure = result {
-                DispatchQueue.main.async {
-                    imageView?.image = UIImage(systemName: Images.System.exclamationmark)?.withRenderingMode(.alwaysTemplate)
-                    imageView?.tintColor = .red
-                }
+                imageView?.image = UIImage(systemName: Images.System.exclamationmark)?.withRenderingMode(.alwaysTemplate)
             }
         }
     }
