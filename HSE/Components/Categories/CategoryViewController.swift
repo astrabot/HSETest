@@ -67,9 +67,9 @@ final class CategoryViewController: UIViewController {
                 self.collectionView.reloadData()
                 self.setFooterVisible(false)
                 self.updateTitle()
-            case .fail(let error):
+            case .failed(let error):
                 self.setFooterVisible(false)
-                self.showError(error)
+                self.showNetworkError(error)
             }
         }.store(in: &cancellables)
     }
@@ -83,7 +83,7 @@ final class CategoryViewController: UIViewController {
         updateTitle()
 
         if distanceFromBottom < height, viewModel.state != .loading, viewModel.hasMoreProductsToDisplay {
-            viewModel.fetchMoreSearchResults()
+            viewModel.fetchMoreResults()
         }
     }
 
@@ -98,9 +98,13 @@ final class CategoryViewController: UIViewController {
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
-    private func showError(_ error: Error) {
+    private func showNetworkError(_ error: Error) {
         let alertController = UIAlertController(title: Strings.errorAlertTitle, message: error.localizedDescription, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: Strings.errorAlertOK, style: .default) { _ in
+        alertController.addAction(UIAlertAction(title: Strings.errorAlertOKAction, style: .default) { _ in
+            alertController.dismiss(animated: true, completion: nil)
+        })
+        alertController.addAction(UIAlertAction(title: Strings.errorAlertRetryAction, style: .default) { _ in
+            self.viewModel?.retryFailedFetch()
             alertController.dismiss(animated: true, completion: nil)
         })
         present(alertController, animated: true, completion: nil)

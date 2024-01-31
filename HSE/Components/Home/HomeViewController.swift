@@ -69,7 +69,7 @@ final class HomeViewController: UITableViewController {
 
     private func showError(_ error: Error) {
         let alertController = UIAlertController(title: Strings.errorAlertTitle, message: error.localizedDescription, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: Strings.errorAlertOK, style: .default) { _ in
+        alertController.addAction(UIAlertAction(title: Strings.errorAlertOKAction, style: .default) { _ in
             alertController.dismiss(animated: true, completion: nil)
         })
         present(alertController, animated: true, completion: nil)
