@@ -17,7 +17,7 @@ final class ProductCell: UICollectionViewCell {
     lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
 
@@ -26,6 +26,7 @@ final class ProductCell: UICollectionViewCell {
         label.font = UIFont.preferredFont(forTextStyle: .callout)
         label.textColor = .label
         label.numberOfLines = 1
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
         return label
     }()
 
@@ -34,6 +35,7 @@ final class ProductCell: UICollectionViewCell {
         label.font = UIFont.preferredFont(forTextStyle: .footnote)
         label.textColor = .label
         label.numberOfLines = 2
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
         return label
     }()
 
@@ -44,6 +46,19 @@ final class ProductCell: UICollectionViewCell {
         stackView.alignment = .fill
         stackView.distribution = .fillProportionally
         return stackView
+    }()
+
+    private lazy var containerView: UIView = {
+        let effectsView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+        effectsView.translatesAutoresizingMaskIntoConstraints = false
+        effectsView.contentView.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: effectsView.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: effectsView.layoutMarginsGuide.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: effectsView.layoutMarginsGuide.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: effectsView.layoutMarginsGuide.bottomAnchor)
+        ])
+        return effectsView
     }()
 
     override init(frame: CGRect) {
@@ -66,15 +81,16 @@ final class ProductCell: UICollectionViewCell {
         contentView.layer.cornerRadius = Constants.cornerRadius
 
         contentView.addSubview(imageView)
-        contentView.addSubview(stackView)
+        contentView.addSubview(containerView)
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            stackView.layoutMarginsGuide.topAnchor.constraint(equalTo: imageView.bottomAnchor),
-            stackView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor)
+            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            containerView.topAnchor.constraint(equalTo: contentView.centerYAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor)
         ])
     }
 
@@ -103,18 +119,6 @@ final class ProductCell: UICollectionViewCell {
                     imageView?.tintColor = .red
                 }
             }
-        }
-    }
-
-    func setHighlighted(_ highlighted: Bool) {
-        if highlighted {
-            contentView.backgroundColor = .lightGray
-            titleLabel.textColor = .white
-            descriptionLabel.textColor = .white
-        } else {
-            contentView.backgroundColor = .tertiarySystemBackground
-            titleLabel.textColor = .label
-            descriptionLabel.textColor = .label
         }
     }
 }

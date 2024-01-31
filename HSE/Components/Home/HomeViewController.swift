@@ -35,10 +35,10 @@ final class HomeViewController: UITableViewController {
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = true
         tableView.register(HomeCell.self)
-        tableView.addSubview(spinner)
+        view.addSubview(spinner)
         NSLayoutConstraint.activate([
-            spinner.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
-            spinner.centerYAnchor.constraint(equalTo: tableView.centerYAnchor)
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 

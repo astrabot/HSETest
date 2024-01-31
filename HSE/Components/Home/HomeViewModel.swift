@@ -64,6 +64,7 @@ final class HomeViewModel: HomeViewModelType {
         state = .loading
         fetchCancellation?.cancel() // cancel previous request
         fetchCancellation = api.categories()
+            .delay(for: 0.5, scheduler: RunLoop.main) // just to show loading spinner :)
             .sink(receiveCompletion: { result in
                 if case let .failure(error) = result {
                     self.state = .fail(error)

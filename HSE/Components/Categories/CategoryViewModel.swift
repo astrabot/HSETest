@@ -58,7 +58,7 @@ final class CategoryViewModel: CategoryViewModelType {
 
     private var productsPerPage = [Int: [ProductHit]]()
     var products: [ProductHit] {
-        productsPerPage.values.flatMap { $0 }
+        productsPerPage.sorted { $0.key < $1.key }.flatMap { $0.value }
     }
 
     var hasMoreProductsToDisplay: Bool {
@@ -98,7 +98,7 @@ final class CategoryViewModel: CategoryViewModelType {
     }
 
     private func search(query: String, page: SearchPaging?) {
-        self.state = .loading
+        state = .loading
         fetchCancellation?.cancel()
         fetchCancellation = api.search(path: category.path, query: query.isEmpty ? "*" : query, page: page)
             .sink(receiveCompletion: { result in
@@ -107,7 +107,10 @@ final class CategoryViewModel: CategoryViewModelType {
                     self.state = .fail(error)
                 }
             }, receiveValue: { result in
-                print("Did fetch search result: hits per page \(result.hits.count) | total hits \(result.totalHits) | pages \(result.paging?.pageCount ?? 1)")
+                print("Did fetch search result: page \(result.paging?.currentPage ?? 1) | " +
+                      "hits per page \(result.hits.count) | " +
+                      "total hits \(result.totalHits) | " +
+                      "total pages \(result.paging?.pageCount ?? 1)")
                 self.state = .loaded(result)
                 let currentPage = result.paging?.currentPage ?? 1 // page numbering begins from 1
                 self.productsPerPage[currentPage] = result.hits

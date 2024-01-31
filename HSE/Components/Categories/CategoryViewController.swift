@@ -142,16 +142,6 @@ extension CategoryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // TODO: Display product details
     }
-
-    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? ProductCell else { return }
-        cell.setHighlighted(true)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? ProductCell else { return }
-        cell.setHighlighted(false)
-    }
 }
 
 extension CategoryViewController: UICollectionViewDelegateFlowLayout {
