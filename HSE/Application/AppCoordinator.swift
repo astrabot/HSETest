@@ -7,7 +7,12 @@ import UIKit
 
 class AppCoordinator {
     let navigationController: UINavigationController
-    lazy var apiService: APIServiceType = APIService(provider: URLSession.shared, decoder: JSONDecoder())
+    lazy var apiService: APIServiceType = {
+        let configuration = URLSessionConfiguration.default // or URLSessionConfiguration.ephemeral to do not use persistent storage for caches, cookies, or credentials
+        configuration.timeoutIntervalForRequest = 5 // make request timeout shorter
+        let session = URLSession(configuration: configuration)
+        return APIService(provider: session, decoder: JSONDecoder())
+    }()
 
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
