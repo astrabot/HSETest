@@ -5,27 +5,6 @@
 import Combine
 import UIKit
 
-private final class LeftAlignedCollectionViewFlowLayout: UICollectionViewFlowLayout {
-    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        guard let attributes = super.layoutAttributesForElements(in: rect) else { return nil }
-
-        var newAttributes = [UICollectionViewLayoutAttributes]()
-        var leftMargin = sectionInset.left
-        var maxY: CGFloat = -1.0
-        for attribute in attributes {
-            guard let newAttribute = attribute.copy() as? UICollectionViewLayoutAttributes else { continue }
-            if newAttribute.frame.origin.y >= maxY {
-                leftMargin = sectionInset.left
-            }
-            newAttribute.frame.origin.x = leftMargin
-            leftMargin += newAttribute.frame.width + minimumInteritemSpacing
-            maxY = max(newAttribute.frame.maxY, maxY)
-            newAttributes.append(newAttribute)
-        }
-        return newAttributes
-    }
-}
-
 final class CategoriesCarouselHeaderView: UICollectionReusableView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     private var cancellables: Set<AnyCancellable> = []
     var viewModel: CategoriesCarouselViewModelType? {
@@ -33,7 +12,7 @@ final class CategoriesCarouselHeaderView: UICollectionReusableView, UICollection
     }
 
     private lazy var collectionView: UICollectionView = {
-        let layout = LeftAlignedCollectionViewFlowLayout()
+        let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 8
         layout.sectionInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         layout.scrollDirection = .horizontal
