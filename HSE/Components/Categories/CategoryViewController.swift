@@ -28,15 +28,6 @@ final class CategoryViewController: UIViewController {
         return collectionView
     }()
 
-    private lazy var spinner: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(style: .large)
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        spinner.color = .systemOrange
-        spinner.hidesWhenStopped = true
-        spinner.stopAnimating()
-        return spinner
-    }()
-
     private enum Constants {
         static let headerHeight: CGFloat = 56
         static let visibleFooterHeight: CGFloat = 56
@@ -56,17 +47,11 @@ final class CategoryViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-
-        view.addSubview(spinner)
-        NSLayoutConstraint.activate([
-            spinner.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
-            spinner.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor)
-        ])
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel?.startSearch()
+        viewModel?.startInitialFetching()
     }
 
     private func bind(to viewModel: CategoryViewModelType?) {
@@ -81,17 +66,14 @@ final class CategoryViewController: UIViewController {
             case .loading:
                 self.collectionView.reloadData()
                 self.setFooterVisible(true)
-            case .loaded, .fail:
+            case .loaded:
                 self.collectionView.reloadData()
                 self.setFooterVisible(false)
+            case .fail(let error):
+                self.setFooterVisible(false)
+                self.showError(error)
             }
-            self.spinner.stopAnimating()
         }.store(in: &cancellables)
-    }
-
-    private func setFooterVisible(_ isVisible: Bool) {
-        loadingFooterHeight = isVisible ? Constants.visibleFooterHeight : Constants.hiddenFooterHeight
-        collectionView.collectionViewLayout.invalidateLayout()
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -101,8 +83,23 @@ final class CategoryViewController: UIViewController {
         let distanceFromBottom = scrollView.contentSize.height - contentYOffset
 
         if distanceFromBottom < height, viewModel.state != .loading, viewModel.hasMoreProductsToDisplay {
-            viewModel.loadMoreSearchResults()
+            viewModel.fetchMoreSearchResults()
         }
+    }
+
+    // MARK: - Helpers
+
+    private func setFooterVisible(_ isVisible: Bool) {
+        loadingFooterHeight = isVisible ? Constants.visibleFooterHeight : Constants.hiddenFooterHeight
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+
+    private func showError(_ error: Error) {
+        let alertController = UIAlertController(title: Strings.errorAlertTitle, message: error.localizedDescription, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: Strings.errorAlertOK, style: .default) { _ in
+            alertController.dismiss(animated: true, completion: nil)
+        })
+        present(alertController, animated: true, completion: nil)
     }
 }
 
@@ -143,7 +140,7 @@ extension CategoryViewController: UICollectionViewDataSource {
 
 extension CategoryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // Display product details
+        // TODO: Display product details
     }
 
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {

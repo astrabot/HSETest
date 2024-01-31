@@ -14,8 +14,8 @@ protocol CategoryViewModelType {
     var statePublisher: AnyPublisher<CategoryViewModel.State, Never> { get }
     var searchInput: CurrentValueSubject<String, Never> { get }
     func makeCategoriesCarouselViewModel() -> CategoriesCarouselViewModelType
-    func startSearch()
-    func loadMoreSearchResults()
+    func startInitialFetching()
+    func fetchMoreSearchResults()
     func selectCategory(_ category: CategoryModel)
     func selectProduct(_ product: ProductHit)
 }
@@ -87,11 +87,12 @@ final class CategoryViewModel: CategoryViewModelType {
         return viewModel
     }
 
-    func startSearch() {
+    func startInitialFetching() {
+        if state != .initial { return } // avoid multiple calls e.g. while view is appearing
         search(query: searchInput.value, page: nil)
     }
 
-    func loadMoreSearchResults() {
+    func fetchMoreSearchResults() {
         guard case let .loaded(result) = state, let paging = result.paging else { return }
         search(query: searchInput.value, page: SearchPaging(number: paging.currentPage + 1, hitsPerPage: nil))
     }
@@ -102,9 +103,11 @@ final class CategoryViewModel: CategoryViewModelType {
         fetchCancellation = api.search(path: category.path, query: query.isEmpty ? "*" : query, page: page)
             .sink(receiveCompletion: { result in
                 if case let .failure(error) = result {
+                    print(error)
                     self.state = .fail(error)
                 }
             }, receiveValue: { result in
+                print("Did fetch search result: hits per page \(result.hits.count) | total hits \(result.totalHits) | pages \(result.paging?.pageCount ?? 1)")
                 self.state = .loaded(result)
                 let currentPage = result.paging?.currentPage ?? 1 // page numbering begins from 1
                 self.productsPerPage[currentPage] = result.hits

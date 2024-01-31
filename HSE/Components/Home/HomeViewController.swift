@@ -44,7 +44,7 @@ final class HomeViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel?.fetchCategories(isInitial: true)
+        viewModel?.startInitialFetching()
     }
 
     private func bind(to viewModel: HomeViewModelType?) {
@@ -58,15 +58,22 @@ final class HomeViewController: UITableViewController {
             case .initial: break
             case .loading:
                 self.spinner.startAnimating()
-                self.tableView.reloadData()
             case .loaded:
                 self.spinner.stopAnimating()
                 self.tableView.reloadData()
-            case .fail:
+            case .fail(let error):
                 self.spinner.stopAnimating()
-                self.tableView.reloadData()
+                self.showError(error)
             }
         }.store(in: &cancellables)
+    }
+
+    private func showError(_ error: Error) {
+        let alertController = UIAlertController(title: Strings.errorAlertTitle, message: error.localizedDescription, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: Strings.errorAlertOK, style: .default) { _ in
+            alertController.dismiss(animated: true, completion: nil)
+        })
+        present(alertController, animated: true, completion: nil)
     }
 
     // MARK: - UITableViewDataSource
@@ -80,9 +87,12 @@ final class HomeViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: HomeCell = tableView.dequeueReusableCell(for: indexPath)
-        configure(cell, forItemAt: indexPath) // can be called in tableView:willDisplay:forRowAt
-        return cell
+        return tableView.dequeueReusableCell(for: indexPath) as HomeCell
+    }
+
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let homeCell = cell as? HomeCell else { return }
+        configure(homeCell, forItemAt: indexPath)
     }
 
     private func configure(_ cell: HomeCell, forItemAt indexPath: IndexPath) {

@@ -63,7 +63,7 @@ final class APIService: APIServiceType {
         var components = URLComponents() // NOTE: URLComponents automatically encodes query items
         components.queryItems = [
             URLQueryItem(name: "query", value: query),
-            URLQueryItem(name: "filter", value: "CategoryPath:\(path)"),
+            URLQueryItem(name: "filter", value: "CategoryPath:\(path)")
         ]
         if let page = page?.number {
             components.queryItems?.append(URLQueryItem(name: "page", value: "\(page)"))

@@ -1,4 +1,5 @@
 included:
+  - HSE
   - HSETestTests
   - HSETestUITests
 excluded:

@@ -9,7 +9,7 @@ protocol HomeViewModelType {
     var statePublisher: AnyPublisher<HomeViewModel.State, Never> { get }
     var titlePublisher: AnyPublisher<String?, Never> { get }
     var categories: [CategoryModel] { get }
-    func fetchCategories(isInitial: Bool)
+    func startInitialFetching()
     func selectCategory(_ category: CategoryModel)
 }
 
@@ -58,9 +58,9 @@ final class HomeViewModel: HomeViewModelType {
         self.title = title
     }
 
-    // Fetch categories. Use isInitial to avoid multiple calls while view is appearing
-    func fetchCategories(isInitial: Bool) {
-        if isInitial && state != .initial { return }
+    // Fetch categories
+    func startInitialFetching() {
+        if state != .initial { return } // avoid multiple calls e.g. while view is appearing
         state = .loading
         fetchCancellation?.cancel() // cancel previous request
         fetchCancellation = api.categories()

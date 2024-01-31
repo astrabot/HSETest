@@ -47,7 +47,7 @@ final class CategoriesCarouselHeaderView: UICollectionReusableView, UICollection
         collectionView.register(CategoryCarouselCell.self)
         return collectionView
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()

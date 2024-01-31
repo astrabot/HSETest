@@ -8,7 +8,7 @@ final class CategoryCarouselCell: UICollectionViewCell {
     lazy var textLabel: UILabel =  {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .callout)
-        label.textColor = .darkGray
+        label.textColor = .label
         label.textAlignment = .center
         label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return label
