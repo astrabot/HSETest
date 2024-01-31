@@ -7,7 +7,7 @@ import UIKit
 
 class AppCoordinator {
     let navigationController: UINavigationController
-    let apiService = APIService()
+    lazy var apiService = APIService(provider: URLSession.shared, decoder: JSONDecoder())
 
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController

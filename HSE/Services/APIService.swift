@@ -31,19 +31,15 @@ protocol APIServiceType {
     func search(path: String, query: String, page: SearchPaging?) -> AnyPublisher<SearchResult, APIError>
 }
 
-extension APIServiceType {
-    func search(path: String) -> AnyPublisher<SearchResult, APIError> { search(path: path, query: "*", page: nil) }
-}
-
 // Simple API service
 final class APIService: APIServiceType {
-    private let session: URLSession
+    private let provider: APIProviderType
     private let decoder: JSONDecoder
 
     let baseURL = URL(string: "https://www.hse.de/dpl")!
 
-    init(session: URLSession = .shared, decoder: JSONDecoder = .init()) {
-        self.session = session
+    init(provider: APIProviderType, decoder: JSONDecoder) {
+        self.provider = provider
         self.decoder = decoder
     }
 
@@ -84,7 +80,7 @@ final class APIService: APIServiceType {
     }
 
     private func request<T: Decodable>(for url: URL) -> AnyPublisher<T, APIError> {
-        session.dataTaskPublisher(for: url)
+        provider.dataPublisher(for: URLRequest(url: url))
             .tryMap {
                 guard let httpResponse =  $0.response as? HTTPURLResponse, 200..<300 ~= httpResponse.statusCode else {
                     throw URLError(.badServerResponse)
@@ -92,13 +88,13 @@ final class APIService: APIServiceType {
                 return $0.data
             }
             .mapError { error -> APIError in
-                print(error)
-                return APIError.networkError
+                guard let error = error as? APIError else { return APIError.networkError }
+                return error
             }
             .decode(type: T.self, decoder: JSONDecoder())
             .mapError { error -> APIError in
-                print(error)
-                return APIError.jsonDecodingError
+                guard let error = error as? APIError else { return APIError.jsonDecodingError }
+                return error
             }
             .eraseToAnyPublisher()
     }

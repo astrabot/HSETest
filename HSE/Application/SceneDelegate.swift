@@ -4,11 +4,16 @@
 
 import UIKit
 
+enum TestHelper {
+    static let isRunningUnitTests: Bool = NSClassFromString("XCTest") != nil
+}
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     var appCoordinator: AppCoordinator?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        guard !TestHelper.isRunningUnitTests else { return }
         guard let ws = scene as? UIWindowScene else { return }
 
         let window = UIWindow(frame: ws.coordinateSpace.bounds)
