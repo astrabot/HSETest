@@ -4,14 +4,14 @@
 
 import Foundation
 
-struct Paging: Decodable {
+struct Paging: Decodable, Equatable {
     let currentPage: Int
     let pageCount: Int
     let hitsPerPage: Int // page size
     let defaultHitsPerPage: Int
 }
 
-struct Variant: Decodable {
+struct Variant: Decodable, Equatable {
     private enum CodingKeys: String, CodingKey {
         case status = "Status"
         case regularPrice = "ReferencePrice"
@@ -28,7 +28,7 @@ struct Variant: Decodable {
     let variantId: String
 }
 
-struct Product: Decodable {
+struct Product: Decodable, Equatable {
     private enum CodingKeys: String, CodingKey {
         case productId = "MasterProductNumber"
         case name = "Name"
@@ -41,7 +41,7 @@ struct Product: Decodable {
     let brand: String?
 }
 
-struct ProductHit: Decodable {
+struct ProductHit: Decodable, Equatable {
     private enum CodingKeys: String, CodingKey {
         case id
         case base = "masterValues"
@@ -54,7 +54,7 @@ struct ProductHit: Decodable {
     let position: Int
 }
 
-struct SearchResult: Decodable {
+struct SearchResult: Decodable, Equatable {
     let paging: Paging?
     let totalHits: Int
     let hits: [ProductHit]

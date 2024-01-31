@@ -28,11 +28,11 @@ enum ApiRoute {
 
 protocol APIServiceType {
     func categories() -> AnyPublisher<CategoriesContainer, APIError>
-    func search(path: String, matching query: String) -> AnyPublisher<SearchResult, APIError>
+    func search(path: String, query: String, page: SearchPaging?) -> AnyPublisher<SearchResult, APIError>
 }
 
 extension APIServiceType {
-    func search(path: String) -> AnyPublisher<SearchResult, APIError> { search(path: path, matching: "*") }
+    func search(path: String) -> AnyPublisher<SearchResult, APIError> { search(path: path, query: "*", page: nil) }
 }
 
 // Simple API service
@@ -47,16 +47,29 @@ final class APIService: APIServiceType {
         self.decoder = decoder
     }
 
+    /// Returns a list of top categories.
     func categories() -> AnyPublisher<CategoriesContainer, APIError> {
         request(for: buildURL(for: .categories))
     }
 
-    func search(path: String, matching query: String) -> AnyPublisher<SearchResult, APIError> {
-        var components = URLComponents() // URLComponents automatically encodes query items
+    /// Returns a search result in the category.
+    ///
+    /// - Parameters:
+    ///   - path: A full category path string.
+    ///   - query: A search query string.
+    ///   - page: Optional. A page of search results. No value means returning the first page with the default page size.
+    func search(path: String, query: String, page: SearchPaging?) -> AnyPublisher<SearchResult, APIError> {
+        var components = URLComponents() // NOTE: URLComponents automatically encodes query items
         components.queryItems = [
             URLQueryItem(name: "query", value: query),
             URLQueryItem(name: "filter", value: "CategoryPath:\(path)"),
         ]
+        if let page = page?.number {
+            components.queryItems?.append(URLQueryItem(name: "page", value: "\(page)"))
+        }
+        if let size = page?.hitsPerPage {
+            components.queryItems?.append(URLQueryItem(name: "hitsPerPage", value: "\(size)"))
+        }
         guard let url = components.url(relativeTo: buildURL(for: .search)) else {
             return Fail(error: .cannotBuildURL).eraseToAnyPublisher()
         }

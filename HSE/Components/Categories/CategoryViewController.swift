@@ -13,9 +13,9 @@ class CategoryViewController: UIViewController {
 
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController()
-        //searchController.searchBar.delegate = self
+        searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.returnKeyType = .done
+        searchController.searchBar.returnKeyType = .search
         searchController.searchBar.tintColor = .systemOrange
         return searchController
     }()
@@ -32,16 +32,25 @@ class CategoryViewController: UIViewController {
         collectionView.contentInsetAdjustmentBehavior = .automatic
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(ProductCell.self)
+        collectionView.register(LoadingFooterView.self, ofKind: UICollectionView.elementKindSectionFooter)
         return collectionView
     }()
 
     private lazy var spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .large)
         spinner.translatesAutoresizingMaskIntoConstraints = false
-        spinner.color = .systemBlue
+        spinner.color = .systemOrange
         spinner.hidesWhenStopped = true
+        spinner.stopAnimating()
         return spinner
     }()
+
+    private enum Constants {
+        static let visibleFooterHeight: CGFloat = 56
+        static let hiddenFooterHeight: CGFloat = 0
+    }
+
+    private var loadingFooterHeight: CGFloat = Constants.hiddenFooterHeight
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +73,7 @@ class CategoryViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel?.searchProducts()
+        viewModel?.startSearch()
     }
 
     private func setupNavigationItem() {
@@ -83,16 +92,30 @@ class CategoryViewController: UIViewController {
             switch $0 {
             case .initial: break
             case .loading:
-                self.spinner.startAnimating()
                 self.collectionView.reloadData()
-            case .loaded:
-                self.spinner.stopAnimating()
+                self.setFooterVisible(true)
+            case .loaded, .fail:
                 self.collectionView.reloadData()
-            case .fail:
-                self.spinner.stopAnimating()
-                self.collectionView.reloadData()
+                self.setFooterVisible(false)
             }
+            self.spinner.stopAnimating()
         }.store(in: &cancellables)
+    }
+
+    private func setFooterVisible(_ isVisible: Bool) {
+        loadingFooterHeight = isVisible ? Constants.visibleFooterHeight : Constants.hiddenFooterHeight
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let viewModel = viewModel else { return }
+        let height = scrollView.frame.size.height
+        let contentYOffset = scrollView.contentOffset.y
+        let distanceFromBottom = scrollView.contentSize.height - contentYOffset
+
+        if distanceFromBottom < height, viewModel.state != .loading, viewModel.hasMoreProductsToDisplay {
+            viewModel.loadMoreSearchResults()
+        }
     }
 }
 
@@ -115,6 +138,15 @@ extension CategoryViewController: UICollectionViewDataSource {
         guard let product = viewModel?.products[indexPath.item] else { return }
         cell.configure(with: product)
     }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionFooter {
+            return collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath) as LoadingFooterView
+        } else {
+            assertionFailure("Unsupported supplementary element of kind " + kind)
+            return UICollectionReusableView()
+        }
+    }
 }
 
 extension CategoryViewController: UICollectionViewDelegate {
@@ -130,6 +162,12 @@ extension CategoryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? ProductCell else { return }
         cell.setHighlighted(false)
+    }
+}
+
+extension CategoryViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        CGSize(width: view.frame.size.width, height: loadingFooterHeight)
     }
 }
 

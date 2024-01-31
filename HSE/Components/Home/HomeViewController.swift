@@ -14,7 +14,7 @@ final class HomeViewController: UITableViewController {
     private lazy var spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .large)
         spinner.translatesAutoresizingMaskIntoConstraints = false
-        spinner.color = .systemBlue
+        spinner.color = .systemOrange
         spinner.hidesWhenStopped = true
         return spinner
     }()

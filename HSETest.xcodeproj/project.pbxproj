@@ -35,6 +35,8 @@
 		5EC9A17327B82FEF0040896F /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5EC9A17227B82FEF0040896F /* .swiftlint.yml */; };
 		5EC9A17527B830FE0040896F /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC9A17427B830FE0040896F /* Images.swift */; };
 		5EC9A17727B831730040896F /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC9A17627B831730040896F /* Strings.swift */; };
+		5EC9A17927B83B310040896F /* SearchPaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC9A17827B83B310040896F /* SearchPaging.swift */; };
+		5EC9A17B27B8449C0040896F /* LoadingFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC9A17A27B8449C0040896F /* LoadingFooterView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +88,8 @@
 		5EC9A17227B82FEF0040896F /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		5EC9A17427B830FE0040896F /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		5EC9A17627B831730040896F /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
+		5EC9A17827B83B310040896F /* SearchPaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPaging.swift; sourceTree = "<group>"; };
+		5EC9A17A27B8449C0040896F /* LoadingFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingFooterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +183,7 @@
 			children = (
 				5EC9A14627B6ABDC0040896F /* Category.swift */,
 				5EC9A15E27B6DACD0040896F /* SearchResult.swift */,
+				5EC9A17827B83B310040896F /* SearchPaging.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -227,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				5EC9A16027B71FA20040896F /* ProductCell.swift */,
+				5EC9A17A27B8449C0040896F /* LoadingFooterView.swift */,
 				5EC9A15C27B6CFD90040896F /* CategoryViewModel.swift */,
 				5EC9A16427B726630040896F /* CategoryViewLayout.swift */,
 				5EC9A15A27B6CC560040896F /* CategoryViewController.swift */,
@@ -422,6 +428,7 @@
 				5EC9A15F27B6DACD0040896F /* SearchResult.swift in Sources */,
 				5EC9A14D27B6B7030040896F /* HomeViewModel.swift in Sources */,
 				5EC9A17727B831730040896F /* Strings.swift in Sources */,
+				5EC9A17B27B8449C0040896F /* LoadingFooterView.swift in Sources */,
 				5EC9A15627B6BAC20040896F /* HomeCell.swift in Sources */,
 				5EC9A15427B6BA300040896F /* NibLoadable.swift in Sources */,
 				5EC9A14727B6ABDC0040896F /* Category.swift in Sources */,
@@ -430,6 +437,7 @@
 				5EC9A15D27B6CFD90040896F /* CategoryViewModel.swift in Sources */,
 				5EC9A11327B6AA3C0040896F /* AppDelegate.swift in Sources */,
 				5EC9A16527B726630040896F /* CategoryViewLayout.swift in Sources */,
+				5EC9A17927B83B310040896F /* SearchPaging.swift in Sources */,
 				5EC9A17527B830FE0040896F /* Images.swift in Sources */,
 				5EC9A16127B71FA20040896F /* ProductCell.swift in Sources */,
 				5EC9A16327B720AE0040896F /* UICollectionView+Reusable.swift in Sources */,

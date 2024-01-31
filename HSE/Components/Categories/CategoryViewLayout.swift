@@ -8,7 +8,6 @@ class HomeCollectionViewLayout: UICollectionViewFlowLayout {
     var numberOfColumns = UIScreen.main.nativeBounds.width > 1668 ? 3 : 2
 
     private enum Constants {
-        static let gridImageSize = CGSize(width: 375, height: 150)
         static let gridTitleAndSubtitleHeight = CGFloat(74)
     }
 
