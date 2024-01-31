@@ -11,15 +11,6 @@ class CategoryViewController: UIViewController {
         didSet { bind(to: viewModel) }
     }
 
-    private lazy var searchController: UISearchController = {
-        let searchController = UISearchController()
-        searchController.searchBar.delegate = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.returnKeyType = .search
-        searchController.searchBar.tintColor = .systemOrange
-        return searchController
-    }()
-
     private lazy var collectionView: UICollectionView = {
         let layout = HomeCollectionViewLayout()
         layout.sectionHeadersPinToVisibleBounds = true
@@ -78,7 +69,6 @@ class CategoryViewController: UIViewController {
 
     private func setupNavigationItem() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
     }
 
@@ -168,17 +158,5 @@ extension CategoryViewController: UICollectionViewDelegate {
 extension CategoryViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         CGSize(width: view.frame.size.width, height: loadingFooterHeight)
-    }
-}
-
-extension CategoryViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        viewModel?.searchInput.send(searchText)
-    }
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        viewModel?.searchInput.send("")
     }
 }

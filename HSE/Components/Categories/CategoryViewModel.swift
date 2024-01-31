@@ -51,7 +51,7 @@ final class CategoryViewModel: CategoryViewModelType {
     @Published var title: String?
     var titlePublisher: AnyPublisher<String?, Never> { $title.eraseToAnyPublisher() }
 
-    var searchInput = CurrentValueSubject<String, Never>("")
+    var searchInput = CurrentValueSubject<String, Never>("") // search input (not implemented)
     private var cancellables: Set<AnyCancellable> = []
 
     private var productsPerPage = [Int: [ProductHit]]()
