@@ -30,7 +30,7 @@ class CategoryModel: Equatable {
     }
 
     var path: String {
-        getPath().map { $0.displayName }.joined(separator: "/")
+        getPath().map { $0.displayName }.reversed().joined(separator: "/")
     }
 
     func getPath() -> [CategoryModel] {
