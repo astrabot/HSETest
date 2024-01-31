@@ -36,6 +36,8 @@ final class CategoryViewController: UIViewController {
 
     private var loadingFooterHeight: CGFloat = Constants.hiddenFooterHeight
 
+    deinit { print("deinit \(Swift.type(of: self))") }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(collectionView)
@@ -56,7 +58,9 @@ final class CategoryViewController: UIViewController {
         cancellables.removeAll()
         guard let viewModel = viewModel else { return }
 
-        viewModel.titlePublisher.receive(on: DispatchQueue.main).assign(to: \.title, on: self).store(in: &cancellables)
+        viewModel.titlePublisher.receive(on: DispatchQueue.main).sink { [weak self] title in
+            self?.title = title
+        }.store(in: &cancellables)
         viewModel.statePublisher.receive(on: DispatchQueue.main).sink { [weak self] in
             guard let self = self else { return }
             switch $0 {

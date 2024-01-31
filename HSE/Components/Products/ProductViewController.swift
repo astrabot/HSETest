@@ -66,6 +66,8 @@ final class ProductViewController: UIViewController {
         return collectionView
     }()
 
+    deinit { print("deinit \(Swift.type(of: self))") }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
