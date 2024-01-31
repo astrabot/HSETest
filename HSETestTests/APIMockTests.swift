@@ -1,5 +1,5 @@
 //
-//  Created by Aliaksandr Strakovich, posterXXL GmbH on 13.02.22.
+//  Created by Aliaksandr Strakovich on 13.02.22.
 //
 
 import Combine

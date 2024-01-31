@@ -12,7 +12,7 @@ final class CategoryViewController: UIViewController {
     }
 
     private lazy var collectionView: UICollectionView = {
-        let layout = HomeCollectionViewLayout()
+        let layout = CategoryViewLayout()
         layout.sectionHeadersPinToVisibleBounds = true
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
