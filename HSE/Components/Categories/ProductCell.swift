@@ -5,7 +5,7 @@
 import Kingfisher
 import UIKit
 
-class ProductCell: UICollectionViewCell {
+final class ProductCell: UICollectionViewCell {
     private enum Constants {
         static let cornerRadius: CGFloat = 5
         static let borderColor: UIColor = .gray

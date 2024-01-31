@@ -37,6 +37,9 @@
 		5EC9A17727B831730040896F /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC9A17627B831730040896F /* Strings.swift */; };
 		5EC9A17927B83B310040896F /* SearchPaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC9A17827B83B310040896F /* SearchPaging.swift */; };
 		5EC9A17B27B8449C0040896F /* LoadingFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC9A17A27B8449C0040896F /* LoadingFooterView.swift */; };
+		5EC9A18027B863580040896F /* CategoryCarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC9A17F27B863580040896F /* CategoryCarouselCell.swift */; };
+		5EC9A18227B863CA0040896F /* CategoriesCarouselViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC9A18127B863CA0040896F /* CategoriesCarouselViewModel.swift */; };
+		5EC9A18427B870080040896F /* CategoriesCarouselHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC9A18327B870080040896F /* CategoriesCarouselHeaderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +93,9 @@
 		5EC9A17627B831730040896F /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		5EC9A17827B83B310040896F /* SearchPaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPaging.swift; sourceTree = "<group>"; };
 		5EC9A17A27B8449C0040896F /* LoadingFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingFooterView.swift; sourceTree = "<group>"; };
+		5EC9A17F27B863580040896F /* CategoryCarouselCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCarouselCell.swift; sourceTree = "<group>"; };
+		5EC9A18127B863CA0040896F /* CategoriesCarouselViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesCarouselViewModel.swift; sourceTree = "<group>"; };
+		5EC9A18327B870080040896F /* CategoriesCarouselHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesCarouselHeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,6 +237,7 @@
 		5EC9A15827B6CC320040896F /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				5EC9A17C27B8624E0040896F /* Carousel */,
 				5EC9A16027B71FA20040896F /* ProductCell.swift */,
 				5EC9A17A27B8449C0040896F /* LoadingFooterView.swift */,
 				5EC9A15C27B6CFD90040896F /* CategoryViewModel.swift */,
@@ -259,6 +266,16 @@
 				5EC9A11D27B6AA400040896F /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		5EC9A17C27B8624E0040896F /* Carousel */ = {
+			isa = PBXGroup;
+			children = (
+				5EC9A17F27B863580040896F /* CategoryCarouselCell.swift */,
+				5EC9A18127B863CA0040896F /* CategoriesCarouselViewModel.swift */,
+				5EC9A18327B870080040896F /* CategoriesCarouselHeaderView.swift */,
+			);
+			path = Carousel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -422,6 +439,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5EC9A18027B863580040896F /* CategoryCarouselCell.swift in Sources */,
+				5EC9A18427B870080040896F /* CategoriesCarouselHeaderView.swift in Sources */,
 				5EC9A14B27B6B5080040896F /* AppCoordinator.swift in Sources */,
 				5EC9A11727B6AA3C0040896F /* HomeViewController.swift in Sources */,
 				5EC9A15B27B6CC560040896F /* CategoryViewController.swift in Sources */,
@@ -440,6 +459,7 @@
 				5EC9A17927B83B310040896F /* SearchPaging.swift in Sources */,
 				5EC9A17527B830FE0040896F /* Images.swift in Sources */,
 				5EC9A16127B71FA20040896F /* ProductCell.swift in Sources */,
+				5EC9A18227B863CA0040896F /* CategoriesCarouselViewModel.swift in Sources */,
 				5EC9A16327B720AE0040896F /* UICollectionView+Reusable.swift in Sources */,
 				5EC9A14427B6AACD0040896F /* APIService.swift in Sources */,
 				5EC9A11527B6AA3C0040896F /* SceneDelegate.swift in Sources */,

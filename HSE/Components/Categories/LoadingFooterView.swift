@@ -4,7 +4,7 @@
 
 import UIKit
 
-class LoadingFooterView: UICollectionReusableView {
+final class LoadingFooterView: UICollectionReusableView {
     private lazy var spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .medium)
         spinner.translatesAutoresizingMaskIntoConstraints = false
@@ -31,4 +31,3 @@ class LoadingFooterView: UICollectionReusableView {
         ])
     }
 }
-

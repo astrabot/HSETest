@@ -12,6 +12,7 @@ protocol CategoryViewModelType {
     var titlePublisher: AnyPublisher<String?, Never> { get }
     var statePublisher: AnyPublisher<CategoryViewModel.State, Never> { get }
     var searchInput: CurrentValueSubject<String, Never> { get }
+    func makeCategoriesCarouselViewModel() -> CategoriesCarouselViewModelType
     func startSearch()
     func loadMoreSearchResults()
     func selectCategory(_ category: CategoryModel)
@@ -71,6 +72,14 @@ final class CategoryViewModel: CategoryViewModelType {
         self.category = category
         self.api = api
         self.title = category.path
+    }
+
+    func makeCategoriesCarouselViewModel() -> CategoriesCarouselViewModelType {
+        let viewModel = CategoriesCarouselViewModel(categories: category.children)
+        viewModel.onSelectCategory = { [weak self] category in
+            self?.onSelectCategory?(category)
+        }
+        return viewModel
     }
 
     func startSearch() {

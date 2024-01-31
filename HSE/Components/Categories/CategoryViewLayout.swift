@@ -4,7 +4,7 @@
 
 import UIKit
 
-class HomeCollectionViewLayout: UICollectionViewFlowLayout {
+final class HomeCollectionViewLayout: UICollectionViewFlowLayout {
     var numberOfColumns = UIScreen.main.nativeBounds.width > 1668 ? 3 : 2
 
     private enum Constants {

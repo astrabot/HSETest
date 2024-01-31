@@ -5,7 +5,7 @@
 import Combine
 import UIKit
 
-class CategoryViewController: UIViewController {
+final class CategoryViewController: UIViewController {
     private var cancellables: Set<AnyCancellable> = []
     var viewModel: CategoryViewModelType? {
         didSet { bind(to: viewModel) }
@@ -23,6 +23,7 @@ class CategoryViewController: UIViewController {
         collectionView.contentInsetAdjustmentBehavior = .automatic
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(ProductCell.self)
+        collectionView.register(CategoriesCarouselHeaderView.self, ofKind: UICollectionView.elementKindSectionHeader)
         collectionView.register(LoadingFooterView.self, ofKind: UICollectionView.elementKindSectionFooter)
         return collectionView
     }()
@@ -37,6 +38,7 @@ class CategoryViewController: UIViewController {
     }()
 
     private enum Constants {
+        static let headerHeight: CGFloat = 56
         static let visibleFooterHeight: CGFloat = 56
         static let hiddenFooterHeight: CGFloat = 0
     }
@@ -45,7 +47,7 @@ class CategoryViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationItem()
+        navigationController?.navigationBar.prefersLargeTitles = true
 
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
@@ -65,11 +67,6 @@ class CategoryViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel?.startSearch()
-    }
-
-    private func setupNavigationItem() {
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.hidesSearchBarWhenScrolling = false
     }
 
     private func bind(to viewModel: CategoryViewModelType?) {
@@ -130,9 +127,14 @@ extension CategoryViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if kind == UICollectionView.elementKindSectionFooter {
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath) as CategoriesCarouselHeaderView
+            headerView.viewModel = viewModel?.makeCategoriesCarouselViewModel()
+            return headerView
+        case UICollectionView.elementKindSectionFooter:
             return collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath) as LoadingFooterView
-        } else {
+        default:
             assertionFailure("Unsupported supplementary element of kind " + kind)
             return UICollectionReusableView()
         }
@@ -156,6 +158,10 @@ extension CategoryViewController: UICollectionViewDelegate {
 }
 
 extension CategoryViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        CGSize(width: view.frame.size.width, height: Constants.headerHeight)
+    }
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         CGSize(width: view.frame.size.width, height: loadingFooterHeight)
     }
