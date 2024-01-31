@@ -1,4 +1,4 @@
-##HSE iOS Test Challenge 2022
+## HSE iOS Test Challenge 2022
 - Candidate: Aliaksandr Strakovich
 
 Develop a native eCommerce App based on REST APIs to retrieve categories and its products
