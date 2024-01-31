@@ -7,8 +7,12 @@ import UIKit
 
 final class HomeViewController: UITableViewController {
     private var cancellables: Set<AnyCancellable> = []
-    var viewModel: HomeViewModelType? {
-        didSet { bind(to: viewModel) }
+    var viewModel: HomeViewModelType {
+        didSet {
+            if isViewLoaded {
+                bind(to: viewModel)
+            }
+        }
     }
 
     private lazy var spinner: UIActivityIndicatorView = {
@@ -19,16 +23,13 @@ final class HomeViewController: UITableViewController {
         return spinner
     }()
 
-    override init(style: UITableView.Style) {
-        super.init(style: style)
+    init(viewModel: HomeViewModelType) {
+        self.viewModel = viewModel
+        super.init(style: .plain)
     }
 
-    override init(nibName: String?, bundle: Bundle?) {
-        super.init(nibName: nibName, bundle: bundle)
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    @available(*, unavailable) required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
@@ -39,11 +40,13 @@ final class HomeViewController: UITableViewController {
             spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+
+        bind(to: viewModel)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel?.startInitialFetching()
+        viewModel.startInitialFetching()
     }
 
     private func bind(to viewModel: HomeViewModelType?) {
@@ -82,7 +85,7 @@ final class HomeViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel?.categories.count ?? 0
+        viewModel.numberOfCategories
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -91,26 +94,14 @@ final class HomeViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let homeCell = cell as? HomeCell else { return }
-        configure(homeCell, forItemAt: indexPath)
-    }
-
-    private func configure(_ cell: HomeCell, forItemAt indexPath: IndexPath) {
-        guard let category = viewModel?.categories[indexPath.row] else { return }
-        cell.textLabel?.text = category.displayName
-        if category.children.isEmpty {
-            cell.detailTextLabel?.text = nil
-            cell.accessoryType = .none
-        } else {
-            cell.detailTextLabel?.text = "Subcategories : \(category.children.count)"
-            cell.accessoryType = .disclosureIndicator
-        }
+        guard let cellViewModel = viewModel.cellViewModel(at: indexPath) else { return }
+        homeCell.configure(with: cellViewModel)
     }
 
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard let category = viewModel?.categories[indexPath.row] else { return }
-        viewModel?.selectCategory(category)
+        viewModel.selectCategory(at: indexPath)
     }
 }

@@ -42,3 +42,10 @@ class CategoryModel: Equatable {
         return lhs.displayName == rhs.displayName
     }
 }
+
+struct CategoryModelBuilder {
+    func buildModel(for category: Category) -> CategoryModel {
+        let children: [Category] = category.children ?? []
+        return CategoryModel(displayName: category.displayName, children: children.map { buildModel(for: $0) })
+    }
+}

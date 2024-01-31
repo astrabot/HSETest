@@ -7,19 +7,19 @@ import UIKit
 
 class AppCoordinator {
     let navigationController: UINavigationController
-    lazy var apiService = APIService(provider: URLSession.shared, decoder: JSONDecoder())
+    lazy var apiService: APIServiceType = APIService(provider: URLSession.shared, decoder: JSONDecoder())
 
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
 
     func start() {
-        let homeViewController = HomeViewController()
         let viewModel = HomeViewModel(title: Strings.homeScreenTitle, api: apiService)
         viewModel.onSelectCategory = { [weak self] category in
             self?.selectCategory(category)
         }
-        homeViewController.viewModel = viewModel
+        // a. Constructor injection of a view model
+        let homeViewController = HomeViewController(viewModel: viewModel)
         navigationController.pushViewController(homeViewController, animated: true)
     }
 
@@ -32,6 +32,7 @@ class AppCoordinator {
         viewModel.onSelectProduct = { [weak self] product in
             self?.selectProduct(product)
         }
+        // b. Property injection of a view model
         categoryViewController.viewModel = viewModel
         navigationController.pushViewController(categoryViewController, animated: true)
     }

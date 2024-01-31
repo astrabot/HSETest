@@ -87,10 +87,7 @@ final class APIService: APIServiceType {
                 }
                 return $0.data
             }
-            .mapError { error -> APIError in
-                guard let error = error as? APIError else { return APIError.networkError }
-                return error
-            }
+            .mapError { _ in APIError.networkError }
             .decode(type: T.self, decoder: JSONDecoder())
             .mapError { error -> APIError in
                 guard let error = error as? APIError else { return APIError.jsonDecodingError }

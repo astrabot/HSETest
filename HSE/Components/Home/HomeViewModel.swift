@@ -2,22 +2,16 @@
 //  Created by Aliaksandr Strakovich on 11.02.22.
 //
 
-import Foundation
 import Combine
+import UIKit
 
 protocol HomeViewModelType {
     var statePublisher: AnyPublisher<HomeViewModel.State, Never> { get }
     var titlePublisher: AnyPublisher<String?, Never> { get }
-    var categories: [CategoryModel] { get }
+    var numberOfCategories: Int { get }
     func startInitialFetching()
-    func selectCategory(_ category: CategoryModel)
-}
-
-struct CategoryModelBuilder {
-    func buildModel(for category: Category) -> CategoryModel {
-        let children: [Category] = category.children ?? []
-        return CategoryModel(displayName: category.displayName, children: children.map { buildModel(for: $0) })
-    }
+    func cellViewModel(at indexPath: IndexPath) -> HomeCellViewModel?
+    func selectCategory(at indexPath: IndexPath)
 }
 
 final class HomeViewModel: HomeViewModelType {
@@ -41,12 +35,12 @@ final class HomeViewModel: HomeViewModelType {
     @Published var state: State = .initial
     var statePublisher: AnyPublisher<HomeViewModel.State, Never> { $state.eraseToAnyPublisher() }
 
-    // To demonstrate that we can define all UI content view view models
+    // To demonstrate that we can define all UI content via view models
     @Published var title: String?
     var titlePublisher: AnyPublisher<String?, Never> { $title.eraseToAnyPublisher() }
 
-    var categories: [CategoryModel] {
-        guard case let .loaded(categories) = state else { return [] }
+    private var categories: [CategoryModel]? {
+        guard case let .loaded(categories) = state else { return nil }
         return categories
     }
 
@@ -62,9 +56,8 @@ final class HomeViewModel: HomeViewModelType {
     func startInitialFetching() {
         if state != .initial { return } // avoid multiple calls e.g. while view is appearing
         state = .loading
-        fetchCancellation?.cancel() // cancel previous request
         fetchCancellation = api.categories()
-            .delay(for: 0.5, scheduler: RunLoop.main) // just to show loading spinner :)
+            //.delay(for: 0.5, scheduler: RunLoop.main) // just to show loading spinner :)
             .sink(receiveCompletion: { result in
                 if case let .failure(error) = result {
                     self.state = .fail(error)
@@ -75,7 +68,25 @@ final class HomeViewModel: HomeViewModelType {
             })
     }
 
-    func selectCategory(_ category: CategoryModel) {
+    var numberOfCategories: Int { categories?.count ?? 0 }
+
+    func cellViewModel(at indexPath: IndexPath) -> HomeCellViewModel? {
+        guard let category = categories?[indexPath.row] else { return nil }
+        let titleText = category.displayName
+        let detailText: String?
+        let accessoryType: UITableViewCell.AccessoryType
+        if category.children.isEmpty {
+            detailText = nil
+            accessoryType = .none
+        } else {
+            detailText = "Subcategories : \(category.children.count)"
+            accessoryType = .disclosureIndicator
+        }
+        return HomeCellViewModel(titleText: titleText, detailText: detailText, accessoryType: accessoryType)
+    }
+
+    func selectCategory(at indexPath: IndexPath) {
+        guard let category = categories?[indexPath.row] else { return }
         onSelectCategory?(category)
     }
 }
