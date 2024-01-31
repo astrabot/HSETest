@@ -159,7 +159,8 @@ extension CategoryViewController: UICollectionViewDelegate {
 
 extension CategoryViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        CGSize(width: view.frame.size.width, height: Constants.headerHeight)
+        let headerHeight = (viewModel?.hasSubcategories ?? false) ? Constants.headerHeight : 0
+        return CGSize(width: view.frame.size.width, height: headerHeight)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {

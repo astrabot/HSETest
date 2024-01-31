@@ -9,6 +9,7 @@ protocol CategoryViewModelType {
     var state: CategoryViewModel.State { get }
     var products: [ProductHit] { get }
     var hasMoreProductsToDisplay: Bool { get }
+    var hasSubcategories: Bool { get }
     var titlePublisher: AnyPublisher<String?, Never> { get }
     var statePublisher: AnyPublisher<CategoryViewModel.State, Never> { get }
     var searchInput: CurrentValueSubject<String, Never> { get }
@@ -63,6 +64,10 @@ final class CategoryViewModel: CategoryViewModelType {
     var hasMoreProductsToDisplay: Bool {
         guard case let .loaded(result) = state, let paging = result.paging else { return false }
         return paging.currentPage < paging.pageCount
+    }
+
+    var hasSubcategories: Bool {
+        !category.children.isEmpty
     }
 
     private let api: APIServiceType
