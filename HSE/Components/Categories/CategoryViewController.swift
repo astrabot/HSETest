@@ -69,6 +69,7 @@ final class CategoryViewController: UIViewController {
             case .loaded:
                 self.collectionView.reloadData()
                 self.setFooterVisible(false)
+                self.updateTitle()
             case .fail(let error):
                 self.setFooterVisible(false)
                 self.showError(error)
@@ -82,9 +83,15 @@ final class CategoryViewController: UIViewController {
         let contentYOffset = scrollView.contentOffset.y
         let distanceFromBottom = scrollView.contentSize.height - contentYOffset
 
+        updateTitle()
+
         if distanceFromBottom < height, viewModel.state != .loading, viewModel.hasMoreProductsToDisplay {
             viewModel.fetchMoreSearchResults()
         }
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        updateTitle()
     }
 
     // MARK: - Helpers
@@ -101,20 +108,23 @@ final class CategoryViewController: UIViewController {
         })
         present(alertController, animated: true, completion: nil)
     }
+
+    private func updateTitle() {
+        viewModel?.updateTitleForVisibleItems(collectionView.indexPathsForVisibleItems)
+    }
 }
 
 extension CategoryViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        1
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel?.products.count ?? 0
+        viewModel?.products.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: ProductCell = collectionView.dequeueReusableCell(for: indexPath)
-        return cell
+        collectionView.dequeueReusableCell(for: indexPath) as ProductCell
     }
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -139,9 +149,7 @@ extension CategoryViewController: UICollectionViewDataSource {
 }
 
 extension CategoryViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // TODO: Display product details
-    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) { }
 }
 
 extension CategoryViewController: UICollectionViewDelegateFlowLayout {

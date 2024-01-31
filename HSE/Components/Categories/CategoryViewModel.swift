@@ -14,6 +14,7 @@ protocol CategoryViewModelType {
     var statePublisher: AnyPublisher<CategoryViewModel.State, Never> { get }
     var searchInput: CurrentValueSubject<String, Never> { get }
     func makeCategoriesCarouselViewModel() -> CategoriesCarouselViewModelType
+    func updateTitleForVisibleItems(_ indexPaths: [IndexPath])
     func startInitialFetching()
     func fetchMoreSearchResults()
     func selectCategory(_ category: CategoryModel)
@@ -42,20 +43,16 @@ final class CategoryViewModel: CategoryViewModelType {
         }
     }
 
-    @Published var state: State = .initial {
-        didSet {
-            guard case let .loaded(result) = state, let paging = result.paging else { return }
-            title = category.path + " \(paging.currentPage) of \(paging.pageCount)"
-        }
-    }
+    @Published var state: State = .initial
     var statePublisher: AnyPublisher<CategoryViewModel.State, Never> { $state.eraseToAnyPublisher() }
 
     @Published var title: String?
-    var titlePublisher: AnyPublisher<String?, Never> { $title.eraseToAnyPublisher() }
+    var titlePublisher: AnyPublisher<String?, Never> { $title.removeDuplicates().eraseToAnyPublisher() }
 
     var searchInput = CurrentValueSubject<String, Never>("") // search input (not implemented)
     private var cancellables: Set<AnyCancellable> = []
 
+    private var currentVisiblePage = -1 // current visible page while scrolling. -1 means initial state
     private var productsPerPage = [Int: [ProductHit]]()
     var products: [ProductHit] {
         productsPerPage.sorted { $0.key < $1.key }.flatMap { $0.value }
@@ -85,6 +82,17 @@ final class CategoryViewModel: CategoryViewModelType {
             self?.onSelectCategory?(category)
         }
         return viewModel
+    }
+
+    func updateTitleForVisibleItems(_ indexPaths: [IndexPath]) {
+        guard case let .loaded(result) = state, let paging = result.paging else { return }
+        let hitsPerPage = paging.hitsPerPage > 0 ? paging.hitsPerPage : 1
+        let maxVisibleItem = indexPaths.map { $0.item }.max() ?? 1
+        let currentVisiblePage = Int(maxVisibleItem / hitsPerPage) + 1
+        if self.currentVisiblePage != currentVisiblePage {
+            self.currentVisiblePage = currentVisiblePage
+            title = category.path + " \(currentVisiblePage) of \(paging.pageCount)"
+        }
     }
 
     func startInitialFetching() {
